@@ -1,5 +1,17 @@
 package com.github.ckpoint.toexcel.core;
 
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+
 import com.github.ckpoint.toexcel.annotation.ExcelHeader;
 import com.github.ckpoint.toexcel.core.converter.ExcelHeaderConverter;
 import com.github.ckpoint.toexcel.core.converter.ExcelHeaderDefatulConverter;
@@ -14,19 +26,6 @@ import com.github.ckpoint.toexcel.util.ModelMapperGenerator;
 import com.github.ckpoint.toexcel.util.TitleRowHelper;
 import lombok.Getter;
 import lombok.NonNull;
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.util.StringUtil;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * The type To work sheet.
@@ -50,8 +49,10 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Instantiates a new To work sheet.
      *
-     * @param toWorkBook the to work book
-     * @param wb         the wb
+     * @param toWorkBook
+     *         the to work book
+     * @param wb
+     *         the wb
      */
     public ToWorkSheet(@NonNull ToWorkBook toWorkBook, @NonNull Workbook wb) {
         this(toWorkBook, wb, null);
@@ -60,9 +61,12 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Instantiates a new To work sheet.
      *
-     * @param toWorkBook the to work book
-     * @param wb         the wb
-     * @param name       the name
+     * @param toWorkBook
+     *         the to work book
+     * @param wb
+     *         the wb
+     * @param name
+     *         the name
      */
     public ToWorkSheet(@NonNull ToWorkBook toWorkBook, @NonNull Workbook wb, String name) {
         this.workBook = toWorkBook;
@@ -81,8 +85,10 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Instantiates a new To work sheet.
      *
-     * @param toWorkBook the to work book
-     * @param _sheet     the sheet
+     * @param toWorkBook
+     *         the to work book
+     * @param _sheet
+     *         the sheet
      */
     public ToWorkSheet(@NonNull ToWorkBook toWorkBook, @NonNull Sheet _sheet) {
         this.workBook = toWorkBook;
@@ -95,7 +101,8 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Update header excel converter to work sheet.
      *
-     * @param excelHeaderConverter the excel header converter
+     * @param excelHeaderConverter
+     *         the excel header converter
      * @return the to work sheet
      */
     public ToWorkSheet updateHeaderExcelConverter(ExcelHeaderConverter excelHeaderConverter) {
@@ -106,8 +113,10 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Create title cell list.
      *
-     * @param width  the width
-     * @param values the values
+     * @param width
+     *         the width
+     * @param values
+     *         the values
      * @return the list
      */
     public List<ToWorkCell> createTitleCell(int width, String... values) {
@@ -128,7 +137,8 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Create cell to newline list.
      *
-     * @param values the values
+     * @param values
+     *         the values
      * @return the list
      */
     public List<ToWorkCell> createCellToNewline(Object... values) {
@@ -139,28 +149,33 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Create cell list.
      *
-     * @param style  the style
-     * @param values the values
+     * @param style
+     *         the style
+     * @param values
+     *         the values
      * @return the list
      */
     public List<ToWorkCell> createCell(@NonNull ToWorkBookStyle style, Object... values) {
         if (values == null || values.length < 1) {
             return new ArrayList<>();
         }
-        return Arrays.stream(values).map(v -> new ToWorkCell(this, cellPosition.nextCell(), v, style)).collect(Collectors.toList());
+        return Arrays.stream(values).map(v -> new ToWorkCell(this, cellPosition.nextCell(), v, style))
+                .collect(Collectors.toList());
     }
 
     /**
      * Create cell list.
      *
-     * @param values the values
+     * @param values
+     *         the values
      * @return the list
      */
     public List<ToWorkCell> createCell(Object... values) {
         if (values == null || values.length < 1) {
             return new ArrayList<>();
         }
-        return Arrays.stream(values).map(v -> new ToWorkCell(this, cellPosition.nextCell(), v)).collect(Collectors.toList());
+        return Arrays.stream(values).map(v -> new ToWorkCell(this, cellPosition.nextCell(), v))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -173,8 +188,10 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Map list.
      *
-     * @param <T>  the type parameter
-     * @param type the type
+     * @param <T>
+     *         the type parameter
+     * @param type
+     *         the type
      * @return the list
      */
     public <T> List<T> map(Class<T> type) {
@@ -201,19 +218,24 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
             }
         }
 
-        List<Map<String, Object>> proxyMapList = IntStream.range(titleRow.getRowNum() + 1, getLastDataRowNum(titleRow, maxRowCnt))
-                .mapToObj(this._sheet::getRow).map(row -> rowToMap(row, excelTitleMap, keyset)).collect(Collectors.toList());
+        List<Map<String, Object>> proxyMapList = IntStream.range(
+                        titleRow.getRowNum() + 1, getLastDataRowNum(titleRow, maxRowCnt))
+                .mapToObj(this._sheet::getRow).map(row -> rowToMap(row, excelTitleMap, keyset))
+                .collect(Collectors.toList());
 
         return proxyMapList.stream().filter(map -> !isEmptyValueMap(map))
                 .map(map -> ModelMapperGenerator.enableFieldModelMapper().map(map, type)).collect(Collectors.toList());
     }
-    private boolean isEmptyValueMap(Map<String, Object> map){
-        if( map == null || map.isEmpty()){
+
+    private boolean isEmptyValueMap(Map<String, Object> map) {
+        if (map == null || map.isEmpty()) {
             return true;
         }
-        for (Map.Entry<String, Object> entry: map.entrySet()) {
-            if( entry.getValue() == null){ continue; }
-            if(!String.valueOf(entry.getValue()).trim().isEmpty()){
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (entry.getValue() == null) {
+                continue;
+            }
+            if (!String.valueOf(entry.getValue()).trim().isEmpty()) {
                 return false;
             }
 
@@ -240,7 +262,8 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Update direction to work sheet.
      *
-     * @param sheetDirection the sheet direction
+     * @param sheetDirection
+     *         the sheet direction
      * @return the to work sheet
      */
     public ToWorkSheet updateDirection(SheetDirection sheetDirection) {
@@ -251,7 +274,8 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Skip list.
      *
-     * @param cnt the cnt
+     * @param cnt
+     *         the cnt
      * @return the list
      */
     public List<ToWorkCell> skip(int cnt) {
@@ -262,31 +286,38 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Merge.
      *
-     * @param width  the width
-     * @param height the height
+     * @param width
+     *         the width
+     * @param height
+     *         the height
      */
     public void merge(int width, int height) {
         this.cellPosition.merge(width, height);
     }
 
-    public void writeTitle(String title, int width){
-        createCell( title);
+    public void writeTitle(String title, int width) {
+        createCell(title);
         merge(width, 1);
         newLine();
     }
+
     /**
      * From.
      *
-     * @param list the list
+     * @param list
+     *         the list
      */
-    public void from( List list) {
+    public void from(List list) {
         from(null, list);
     }
+
     /**
      * From.
      *
-     * @param title the title
-     * @param list the list
+     * @param title
+     *         the title
+     * @param list
+     *         the list
      */
     public void from(String title, List list) {
         if (list == null || list.isEmpty()) {
@@ -301,7 +332,7 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
         List<ToTitleKey> keys = fields.stream().filter(field -> field.getAnnotation(ExcelHeader.class) != null)
                 .map(field -> new ToTitleKey(field, fieldCount.getAndIncrement(), __excelHeaderConverter))
                 .sorted().collect(Collectors.toList());
-        if( title != null){
+        if (title != null) {
             writeTitle(title, keys.size());
         }
         keys.forEach(key -> this.createTitleCell(1, key.getViewName()));
@@ -313,8 +344,10 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
     /**
      * Gets cell.
      *
-     * @param rowIdx  the row idx
-     * @param cellIdx the cell idx
+     * @param rowIdx
+     *         the row idx
+     * @param cellIdx
+     *         the cell idx
      * @return the cell
      */
     public Cell getCell(@NonNull int rowIdx, @NonNull int cellIdx) {
@@ -331,7 +364,8 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
             return new ArrayList<>();
         }
 
-        return IntStream.range(0, this._sheet.getNumMergedRegions()).mapToObj(i -> this._sheet.getMergedRegion(i)).collect(Collectors.toList());
+        return IntStream.range(0, this._sheet.getNumMergedRegions()).mapToObj(i -> this._sheet.getMergedRegion(i))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -344,6 +378,15 @@ public class ToWorkSheet implements ExcelHeaderHelper, TitleRowHelper {
             return 0;
         }
         return this._sheet.getLastRowNum() + 1;
+    }
+
+
+    public void clearCellPosition() {
+        this.cellPosition.clear();
+    }
+
+    public Sheet getOriginalSheet() {
+        return this._sheet;
     }
 
     private void writeObject(Object obj, List<ToTitleKey> keys) {
