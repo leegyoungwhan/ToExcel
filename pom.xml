@@ -156,6 +156,16 @@
         </dependency>
 
 
-
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>miceHub</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/leegyoungwhan/ToExcel</url>
+        </repository>
+    </distributionManagement>
+
+
+
 </project>
