@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.ckpoint</groupId>
+    <groupId>com.github.toexcel</groupId>
     <artifactId>toexcel</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>TOExcel</name>
     <description>This is a library that makes Excel easier to use in Java. </description>
-    <url>https://github.com/ckpoint/toexcel</url>
+    <url>https://github.com/leegyoungwhan/ToExcel.git</url>
 
 
 
@@ -22,31 +22,13 @@
         </license>
     </licenses>
 
-    <scm>
-        <url>https://github.com/ckpoint/toexcel</url>
-        <connection>scm:git:git@github.com:ckpoint/ToExcel.git</connection>
-        <developerConnection>scm:git:git@github.com:ckpoint/ToExcel.git</developerConnection>
-    </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <name>ossrh</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-            <layout>default</layout>
-        </repository>
-    </distributionManagement>
 
     <developers>
         <developer>
-            <email>lhs1553@gmail.com</email>
-            <name>HeeSeob Lim</name>
-            <url>https://github.com/ckpoint</url>
-            <id>ckpoint</id>
+            <email>leekhy02@micehub.com</email>
+            <name>leegyoungwhan</name>
+            <url>https://github.com/leegyoungwhan/ToExcel.git</url>
+            <id>ToExcel</id>
         </developer>
     </developers>
 
